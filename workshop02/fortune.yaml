@@ -1,0 +1,36 @@
+#apiVersion: if core just version, if not core eg abc then abc/v1
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: myns
+  labels: 
+    dep: eng
+---
+#pod is core
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortune-pod
+  namespace: myns
+  labels: 
+    dep: eng
+    project: ws2
+spec:
+  containers:
+# "-" one array element
+  - name: fortune-container
+# where pulls image from (kubernetes has its own docker)
+    image: chukmunnlee/fortune:v1
+    imagePullPolicy: Always
+    env: 
+    - name: APP_PORT
+#variable "" in quotes below // its the container port in the pod
+      value: "8080"
+    ports:
+#DNS name, less than 16 Characters
+#if do not declare, will still have container at 3000, but do need if i want to map above
+    - name: fortune-port
+      containerPort: 3000
+
+

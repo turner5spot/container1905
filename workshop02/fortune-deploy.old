@@ -1,0 +1,36 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: myns
+  labels: 
+    dep: eng
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fortune-deploy
+  namespace: myns
+  labels: 
+    dep: eng
+    project: deploy
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        dep: eng
+        app: fortune
+    template: 
+#pod yaml, start with metadata
+      metadata:
+        name: fortune-pod
+        labels: 
+          dep: eng
+          project: deploy
+      spec:
+      - name: fortune-pod
+        image: chukmunnlee/fortune:v1
+        imagePullPolicy: ifNotPresent
+        ports:
+        - name: fortune-port
+          containerPort: 3000
